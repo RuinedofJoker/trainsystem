@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.TagsMapper">
+    <select id="getTagsByTagsId" resultType="Tags">
+        SELECT * FROM tags WHERE tags_id=#{tagsId}
+    </select>
+
+    <select id="getTagsByAttractionsId" resultType="String">
+        SELECT tags.tags
+        FROM tags JOIN attractions_tags ON tags.tags_id=attractions_tags.tags_id
+        WHERE attractions_id=#{attractionsId}
+    </select>
+</mapper>

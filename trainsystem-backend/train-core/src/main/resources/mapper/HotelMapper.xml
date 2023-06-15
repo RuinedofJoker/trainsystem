@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.HotelMapper">
+
+    <sql id="allField">
+        hotel_id,hotel_name,city_id,price,user_id,star,appraise_score,summary,address,hotel_picture,hotel_policies_id
+    </sql>
+
+    <select id="selectHotelByCityId" resultType="Hotel">
+        select <include refid="allField"></include> from hotel where city_id=#{cityId}
+          limit ${pageNo * pageSize},#{pageSize}
+    </select>
+
+    <select id="selectCountByCityId" resultType="int">
+        select count(1) from hotel where city_id=#{cityId}
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.TrainStationInfoMapper">
+
+    <sql id="allField">
+        station_train_id,train_no,city_name,total_num,arrive_time,stay_time,train_date
+    </sql>
+
+    <sql id="simpleField">
+        train_no,city_name,total_num,arrive_time,stay_time
+    </sql>
+
+    <insert id="insertTrainStationInfo">
+        insert into train_station_info(<include refid="allField"></include>)
+        values (#{stationTrainId},#{trainNo},#{cityName},#{totalNum},#{arriveTime},#{stayTime},#{trainDate})
+    </insert>
+
+    <select id="selectStartMap" parameterType="TrainStationInfo" resultType="TrainStationInfo">
+        select train_no,city_name,total_num,arrive_time,station_train_id
+        from train_station_info
+        where train_no in(select train_no
+                          from train_station_info
+                          where city_name=#{cityName}
+                            and train_date=#{trainDate})
+          and train_date=#{trainDate}
+        order by train_no,total_num
+    </select>
+
+    <select id="selectArrivedTrips" parameterType="TrainStationInfo" resultType="TrainStationInfo">
+        select <include refid="allField"></include>
+        from train_station_info
+        where city_name=#{cityName} and train_date=#{trainDate}
+        order by arrive_time
+    </select>
+
+    <select id="selectStayedTripsTime" parameterType="TrainStationInfo" resultType="TrainStationInfo">
+        select <include refid="allField"></include>
+        from train_station_info
+        where city_name=#{cityName} and train_date=#{trainDate}
+        order by stay_time  limit 0,1
+    </select>
+
+    <select id="selectTrainNoBeforeCurrCity" parameterType="TrainStationInfo" resultType="TrainStationInfo">
+        select <include refid="allField"></include> from train_station_info
+        where train_no=#{trainNo}
+          and train_date=#{trainDate}
+          and total_num &lt;
+              (select total_num from train_station_info
+                where train_no=#{trainNo}
+                  and train_date=#{trainDate}
+                  and city_name=#{cityName})
+        order by total_num desc
+    </select>
+
+    <select id="selectTripsBeforeCurrCity" parameterType="TrainStationInfo" resultType="TrainStationInfo">
+        select <include refid="allField"></include> from train_station_info
+        where city_name=#{cityName}
+          and train_date=#{trainDate}
+          and arrive_time &lt; #{stayTime}
+        group by train_no
+        order by arrive_time
+    </select>
+</mapper>

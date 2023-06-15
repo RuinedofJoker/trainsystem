@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.AttractionsMapper">
+
+    <select id="getAttractionsByAttractionsId" resultType="Attractions">
+        SELECT attractions.*,tags.tags
+        FROM attractions JOIN tags
+        ON attractions.attractions_id=tags.tags_id
+        WHERE attractions_id=#{attractionsId}
+    </select>
+
+    <select id="getCityNameAndUrl" resultType="AttractionsCityNameAndUrl">
+        SELECT city.*,province.province_name
+        FROM city JOIN province ON
+        city.province_id=province.province_id
+        WHERE city.english_name is NOT NULL ORDER BY province_id
+    </select>
+</mapper>

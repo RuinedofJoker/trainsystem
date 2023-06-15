@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.CommentAreaMapper">
+
+    <sql id="allField">*</sql>
+
+    <select id="selectMainCommentPage" resultType="CommentArea">
+        select <include refid="allField"></include> from comment_area
+        where article_id=#{articleId} and comment_type=#{commentType} and is_main_reply=1 and is_effective=1
+        order by date desc
+        limit ${pageNo * pageSize},#{pageSize}
+    </select>
+
+    <select id="selectMainCommentPageCount" resultType="int">
+        select count(1) from comment_area
+        where article_id=#{articleId} and comment_type=#{commentType} and is_main_reply=1 and is_effective=1
+        order by date desc
+    </select>
+</mapper>

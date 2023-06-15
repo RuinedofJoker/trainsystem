@@ -1,0 +1,98 @@
+非管理员用户每条命令前加sudo
+java:
+yum -y install lrzsz
+
+yum list java
+
+查看安装了几个java
+update-alternatives --display java
+
+
+设置java的版本
+update-alternatives --config java
+update-alternatives --config java-devel
+cd /root
+nohup /etc/alternatives/jre_11_openjdk/bin/java -jar jenkins.war --httpPort=8088
+
+-Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true
+
+java-1.8.0-openjdk-devel
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.362.b08-1.el7_9.x86_64/bin
+
+
+maven:
+tar -zxvf apache-maven-3.9.1-bin.tar.gz
+mv apache-maven-3.9.1 /usr/local/maven
+cd /usr/local/maven/bin
+./mvn -v
+/usr/local/maven/bin/mvn
+
+git:
+yum -y install git
+
+
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum makecache
+
+
+nohup java -jar jenkins.war --httpPort=8088
+
+chmod -R 777 /usr/local/maven
+chmod -R 777 /usr/local/maven_repository
+
+cd .jenkins/workspace
+chmod -R 777 .jenkins/workspace
+
+/job/first/build?token=TOKEN_NAME
+
+#stop:
+#!/bin/bash
+echo "Stop Procedure : demo01-0.0.1-SNAPSHOT.jar"
+pid=`ps -ef |grep java|grep demo01-0.0.1-SNAPSHOT.jar|awk '{print $2}'
+echo 'old Procedure pid:'$pid
+if [ -n "$pid" ]
+then
+kill -9 $pid
+fi
+
+#start:
+#!/bin/bash
+echo 'Start the program : demo01-0.0.1-SNAPSHOT.jar'
+chmod 777 /root/.jenkins/workspace/first/target/demo01-0.0.1-SNAPSHOT.jar
+echo '-------Starting-------'
+cd /root/.jenkins/workspace/first/target
+nohup java -jar demo01-0.0.1-SNAPSHOT.jar
+
+https://github.com/RuinedofJoker/test.git
+https://gitee.com/ruined-joker/jokersgit.git
+com.example/demo01/0.0.1-SNAPSHOT/demo01-0.0.1-SNAPSHOT.jar
+echo 'start success'
+
+
+http://124.221.121.134:8088/job/train-system-backend/build?token=train-system-backend-ruinedjoker
+
+./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --user=root --group=admin
+
+npm install
+npm build
+# 打包 build 后的文件
+tar -zcvf build.tar.gz build
+# 删除 build 后的文件
+rm -rf build
+# 移动 build 后的压缩包到 nginx 托管目录下。
+mv build.tar.gz /usr/local/nginx/html
+# 进入托管目录下
+cd /usr/local/nginx/html
+rm -rf build
+# 解压
+tar -zxvf build.tar.gz -C ./
+# 删除压缩包
+rm -rf build.tar.gz
+
+/usr/local/nginx/html/build
+
+检测配置是否出错
+/usr/local/nginx/sbin/nginx -t
+重启
+/usr/local/nginx/sbin/nginx -s reload

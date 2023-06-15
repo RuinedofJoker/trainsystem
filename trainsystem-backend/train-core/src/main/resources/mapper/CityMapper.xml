@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.CityMapper">
+    <sql id="allField">
+        city_id,city_name,province_id,city_hotspot,english_name
+    </sql>
+    <select id="selectCityNameByFirstStr" resultType="City">
+        select <include refid="allField"></include> from city where firstPinyin(city_name)=#{firstStr}
+            limit ${pageNo * pageSize},#{pageSize}
+    </select>
+
+    <select id="selectCityFuzzyMatch" parameterType="String" resultType="City">
+        select <include refid="allField"></include> from city
+        where city_name like #{fuzzy}
+        order by city_hotspot desc
+    </select>
+
+    <select id="selectHotCity" resultType="City">
+        select <include refid="allField"></include> from city where city_hotspot != 0 order by city_hotspot desc
+    </select>
+
+    <select id="getCityIdByEnglishName" resultType="String">
+        SELECT city_id FROM city WHERE english_name=#{englishName}
+    </select>
+
+    <select id="getCityIdByAttractionsId" resultType="String">
+        SELECT attractions.city_id FROM attractions WHERE attractions_id=#{attractionsId}
+    </select>
+
+    <select id="getEnglishNameByCityId" resultType="String">
+        SELECT city.english_name FROM city WHERE city_id=#{cityId}
+    </select>
+</mapper>

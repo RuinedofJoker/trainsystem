@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.StorageFileMapper">
+    <select id="getStorageFileByAttractionsId" resultType="StorageFile">
+        SELECT storage_file.*
+        FROM storage_file JOIN picture ON storage_file.file_id=picture.file_id
+        JOIN attractions ON picture.owned_id = attractions.attractions_id
+        WHERE attractions_id=#{attractionsId} AND picture.picture_type=1
+    </select>
+
+    <select id="getStorageFileByFileId" resultType="StorageFile">
+        SELECT * FROM storage_file WHERE file_id=#{fileId}
+    </select>
+
+    <select id="getFileNameByFileId" resultType="String">
+        SELECT storage_file.filename FROM storage_file WHERE file_id=#{fileId}
+    </select>
+
+    <select id="getThumbnailFileNameByAttractionsId" resultType="String">
+        SELECT storage_file.filename
+        FROM storage_file JOIN picture ON storage_file.file_id=picture.file_id
+        JOIN attractions ON picture.owned_id = attractions.attractions_id
+        WHERE attractions_id=#{attractionsId} AND picture.picture_type=7
+    </select>
+</mapper>

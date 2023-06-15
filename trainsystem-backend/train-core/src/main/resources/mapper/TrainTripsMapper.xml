@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.TrainTripsMapper">
+
+    <sql id="probablyField">train_no,station_train_code,train_date,from_station_name,to_station_name,total_num</sql>
+
+    <sql id="seatField">seat_types=#{seatTypes},gjrw=#{gjrw},rw=#{rw},wz=#{wz},yw=#{yw},yz=#{yz},ed=#{ed},yd=#{yd},td=#{td}</sql>
+
+    <sql id="priceField">gjrw_Price=#{gjrwPrice},rw_Price=#{rwPrice},wz_Price=#{wzPrice},yw_Price=#{ywPrice},yz_Price=#{yzPrice},ed_Price=#{edPrice},yd_Price=#{ydPrice},td_Price=#{td}</sql>
+
+    <delete id="deleteDelayTrainTripsInfo" parameterType="int">
+        delete from train_trips where train_date &lt; #{trainDate}
+    </delete>
+
+    <select id="selectOneWayPage" parameterType="TrainTripsPage" resultType="TrainTrips">
+        select <include refid="probablyField"></include> from train_trips
+        where train_no in (
+            select tsi1.train_no from train_station_info tsi1
+            left join train_station_info tsi2
+            on tsi1.train_no=tsi2.train_no
+            where tsi1.total_num &lt; tsi2.total_num
+                                   and tsi1.city_name like #{fromStationName}
+                                   and tsi2.city_name like #{toStationName}
+                                   and tsi1.train_date=#{trainDate}
+                                   and tsi1.stay_time >= #{departureTimeBegin}
+                                   and tsi1.stay_time &lt;= #{departureTimeEnd})
+            <foreach collection="trainType" item="item" open="and (" close=")" separator="or">
+                station_train_code like #{item}
+            </foreach>
+        limit ${pageNo * pageSize},#{pageSize}
+    </select>
+    <select id="selectOneWayPageCount" parameterType="TrainTripsPage" resultType="int">
+        select count(1) from train_trips
+        where train_no in (
+        select tsi1.train_no from train_station_info tsi1
+        left join train_station_info tsi2
+        on tsi1.train_no=tsi2.train_no
+        where tsi1.total_num &lt; tsi2.total_num
+        and tsi1.city_name like #{fromStationName}
+        and tsi2.city_name like #{toStationName}
+        and tsi1.train_date=#{trainDate}
+        and tsi1.stay_time >= #{departureTimeBegin}
+        and tsi1.stay_time &lt;= #{departureTimeEnd})
+        <foreach collection="trainType" item="item" open="and (" close=")" separator="or">
+            station_train_code like #{item}
+        </foreach>
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(*) from train_trips
+    </select>
+
+    <select id="selectOneByCurrCount" parameterType="int" resultType="TrainTrips">
+        select <include refid="probablyField"></include>,seat_types from train_trips
+        limit #{currCount},1
+    </select>
+
+    <update id="updateSeatTypes" parameterType="TrainTrips">
+        update train_trips set <include refid="seatField"></include> where train_no=#{trainNo} and train_date=#{trainDate}
+    </update>
+
+    <update id="updatePrice" parameterType="TrainTrips">
+        update train_trips set <include refid="priceField"></include> where train_no=#{trainNo} and train_date=#{trainDate}
+    </update>
+</mapper>

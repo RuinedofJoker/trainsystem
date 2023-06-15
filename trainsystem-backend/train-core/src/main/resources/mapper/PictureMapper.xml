@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hnxxxy.rg1b.mapper.PictureMapper">
+    <select id="getDetailPictureByAttractionsId" resultType="Picture">
+        SELECT picture.*
+        FROM attractions
+        JOIN picture ON
+        attractions.attractions_id=picture.owned_id
+        WHERE attractions_id=#{attractionsId} AND picture.picture_type=1
+    </select>
+
+    <select id="getRecommendPictureByAttractionsId" resultType="String">
+        SELECT picture.file_id
+        FROM attractions
+        JOIN picture ON
+        attractions.attractions_id=picture.owned_id
+        WHERE attractions_id=#{attractionsId} AND picture.picture_type=5
+    </select>
+
+    <select id="getCityPictureByEnglishName" resultType="String">
+        SELECT picture.picture_id
+        FROM picture JOIN city ON picture.owned_id=city.city_id
+        WHERE city.english_name=#{englishName} AND picture.picture_type=6
+    </select>
+
+    <select id="getFileIdByAttractionsId" resultType="String">
+        SELECT picture.file_id
+        FROM picture
+        WHERE owned_id=#{attractionsId} AND picture_type=7
+    </select>
+
+    <select id="getCoverFileByAttractionsId" resultType="String">
+        SELECT picture.file_id FROM picture WHERE owned_id=#{attractionsId} AND is_cover=1
+    </select>
+</mapper>
