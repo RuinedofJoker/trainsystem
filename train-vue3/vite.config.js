@@ -33,14 +33,12 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
         '/dev-api': {
-          // target: 'http://localhost:8080',
-          target: 'http://124.221.121.134:8080',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/dev-api/, '')
         },
         '/websocket-api': {
-          // target: 'ws://localhost:8080',
-          target: 'http://124.221.121.134:8080',
+          target: 'ws://localhost:8080',
           changeOrigin: true,
           ws: true,
           rewrite: (p) => p.replace(/^\/websocket-api/, '')
